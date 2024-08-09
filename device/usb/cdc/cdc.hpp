@@ -46,8 +46,7 @@ public:
         buffer_writing_.store(!writing, std::memory_order::relaxed);
         std::atomic_signal_fence(std::memory_order::release);
 
-        auto data = const_cast<uint8_t*>(
-            reinterpret_cast<const uint8_t*>(transmit_buffers_[writing].data()));
+        auto data = reinterpret_cast<uint8_t*>(transmit_buffers_[writing].data());
 
         // Note: Must read written_size again here to avoid packet loss.
         assert(
