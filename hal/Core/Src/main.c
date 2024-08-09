@@ -87,6 +87,21 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 
+  extern __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END;
+  // Generate USB PID from STM32 12-byte unique id using simple CRC-16 algorithm.
+  uint16_t pid  = 0xFFFF;
+  uint8_t *data = (uint8_t*)0x1FFF7A10u;
+  size_t len    = 12;
+  while (len--) {
+    pid ^= *data++;
+    for (int i = 0; i < 8; i++) {
+      if (pid & 1) pid = (pid >> 1) ^ 0x8408;
+      else         pid = (pid >> 1);
+    }
+  }
+  USBD_FS_DeviceDesc[10] = LOBYTE(pid);
+  USBD_FS_DeviceDesc[11] = HIBYTE(pid);
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -100,8 +115,10 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
+
   AppEntry();
   assert(0);
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -193,7 +193,7 @@ __ALIGN_BEGIN static uint8_t USBD_CDC_CfgDesc[USB_CDC_CONFIG_DESC_SIZ] __ALIGN_E
   0x00,                                       /* bInterfaceNumber: Number of Interface */
   0x00,                                       /* bAlternateSetting: Alternate setting */
   0x01,                                       /* bNumEndpoints: One endpoint used */
-  0x02,                                       /* bInterfaceClass: Communication Interface Class */
+  0xFF,                                       /* bInterfaceClass: Vendor Specific */
   0x02,                                       /* bInterfaceSubClass: Abstract Control Model */
   0x01,                                       /* bInterfaceProtocol: Common AT commands */
   0x00,                                       /* iInterface */
@@ -241,7 +241,7 @@ __ALIGN_BEGIN static uint8_t USBD_CDC_CfgDesc[USB_CDC_CONFIG_DESC_SIZ] __ALIGN_E
   0x01,                                       /* bInterfaceNumber: Number of Interface */
   0x00,                                       /* bAlternateSetting: Alternate setting */
   0x02,                                       /* bNumEndpoints: Two endpoints used */
-  0x0A,                                       /* bInterfaceClass: CDC */
+  0xFF,                                       /* bInterfaceClass: Vendor Specific */
   0x00,                                       /* bInterfaceSubClass */
   0x00,                                       /* bInterfaceProtocol */
   0x00,                                       /* iInterface */
