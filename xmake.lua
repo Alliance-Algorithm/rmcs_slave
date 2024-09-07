@@ -58,7 +58,7 @@ target("application", function()
     add_cxxflags("-fno-threadsafe-statics")
 
     -- 指定链接脚本
-    add_ldflags("-T hal/STM32F407IGHx_FLASH.ld")
+    add_ldflags("-T bsp/HAL/STM32F407IGHx_FLASH.ld")
     -- 链接标准c库，数学库和标准c++库
     add_ldflags("-lc", "-lm", "-lstdc++")
     -- 在链接时打印内存占用
