@@ -14,11 +14,10 @@ target("application", function()
     add_rules("c++", "asm")
     set_extension(".elf")
 
-    if is_mode("debug") then       -- 调试模式，开启Og优化，但不开启lto优化，以保留调试信息
+    if is_mode("debug") then       -- 调试模式，开启Og优化
         add_cxflags("-Og")
-    elseif is_mode("release") then -- 发布模式
+    elseif is_mode("release") then -- 发布模式，开启O3优化
         set_optimize("fastest")
-        -- add_cxflags("-Og")
     end
 
     -- 从CubeMX生成的Makefile中读取hal的源文件和头文件
