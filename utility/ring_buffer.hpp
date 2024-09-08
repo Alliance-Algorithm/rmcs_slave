@@ -5,14 +5,12 @@
 
 #include <algorithm>
 #include <atomic>
+#include <bit>
 
 namespace utility {
 
-template <size_t n>
-concept is_power_of_2 = !!n && !(n & (n - 1));
-
 template <typename T, size_t max_size>
-requires(max_size >= 2 && is_power_of_2<max_size>)
+requires(max_size >= 2 && std::has_single_bit(max_size))
 class RingBuffer {
 public:
     constexpr RingBuffer() = default;
