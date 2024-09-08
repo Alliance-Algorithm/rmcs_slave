@@ -1,10 +1,10 @@
 #include "cdc.hpp"
 
-#include "device/can/can.hpp"
-#include "device/uart/uart.hpp"
-#include "device/usb/field.hpp"
+#include "app/can/can.hpp"
+#include "app/uart/uart.hpp"
+#include "app/usb/field.hpp"
 
-namespace device::usb {
+namespace usb {
 
 inline int8_t hal_cdc_init_callback() {
     USBD_CDC_SetRxBuffer(&hUsbDeviceFS, reinterpret_cast<uint8_t*>(Cdc::receive_buffer_));
@@ -70,4 +70,4 @@ USBD_CDC_ItfTypeDef USBD_Interface_fops_FS = {
     hal_cdc_receive_callback, hal_cdc_transmit_complete_callback};
 }
 
-} // namespace device::usb
+} // namespace usb

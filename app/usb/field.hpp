@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace device::usb::field {
+namespace usb::field {
 
 // All id enumeration items have a FUCKING underscore.
 // Because the FUCKING HAL library defines these SHORT words as FUCKING GLOBAL macros.
@@ -46,4 +46,4 @@ enum class CommandId : uint8_t {
     BUZZER_ = 12,
 };
 
-} // namespace device::usb::field
+} // namespace usb::field

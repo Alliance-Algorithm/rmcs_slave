@@ -5,7 +5,7 @@
 
 #include "utility/lazy.hpp"
 
-namespace app::logger {
+namespace logger {
 
 class Logger {
 public:
@@ -27,4 +27,4 @@ private:
 
 inline constinit Logger::Lazy logger;
 
-}; // namespace app::logger
+}; // namespace logger

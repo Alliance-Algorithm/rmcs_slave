@@ -7,11 +7,11 @@
 
 #include <usart.h>
 
-#include "device/usb/field.hpp"
+#include "app/usb/field.hpp"
 #include "utility/interrupt_safe_buffer.hpp"
 #include "utility/lazy.hpp"
 
-namespace device::uart {
+namespace uart {
 
 class Uart {
 public:
@@ -131,4 +131,4 @@ inline constinit Uart::Lazy uart1{&huart6, 15};
 inline constinit Uart::Lazy uart2{&huart1, 15};
 inline constinit Uart::Lazy uart_dbus{&huart3, 31};
 
-} // namespace device::uart
+} // namespace uart

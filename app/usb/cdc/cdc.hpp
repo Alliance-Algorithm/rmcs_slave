@@ -11,7 +11,7 @@
 #include "utility/interrupt_safe_buffer.hpp"
 #include "utility/lazy.hpp"
 
-namespace device::usb {
+namespace usb {
 
 extern "C" {
 extern USBD_HandleTypeDef hUsbDeviceFS;
@@ -87,4 +87,4 @@ private:
 
 inline constinit Cdc::Lazy cdc;
 
-} // namespace device::usb
+} // namespace usb

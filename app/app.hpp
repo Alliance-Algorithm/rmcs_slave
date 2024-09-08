@@ -3,8 +3,6 @@
 #include "utility/immovable.hpp"
 #include "utility/lazy.hpp"
 
-namespace app {
-
 class App : private utility::Immovable {
 public:
     using Lazy = utility::Lazy<App>;
@@ -15,5 +13,3 @@ public:
 };
 
 inline constinit App::Lazy app;
-
-} // namespace app

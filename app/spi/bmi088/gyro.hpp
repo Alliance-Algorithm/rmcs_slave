@@ -7,12 +7,12 @@
 #include <spi.h>
 #include <usbd_cdc.h>
 
-#include "device/spi/bmi088/field.hpp"
-#include "device/spi/spi.hpp"
-#include "device/timer/us_delay.hpp"
-#include "device/usb/cdc/cdc.hpp"
+#include "app/spi/bmi088/field.hpp"
+#include "app/spi/spi.hpp"
+#include "app/timer/us_delay.hpp"
+#include "app/usb/cdc/cdc.hpp"
 #include "utility/interrupt_safe_buffer.hpp"
-namespace device::spi::bmi088 {
+namespace spi::bmi088 {
 
 class Gyroscope final : SpiModuleInterface {
 public:
@@ -62,7 +62,7 @@ public:
                 assert(init_rx_buffer_ && init_rx_size_ == 2);
                 if (init_rx_buffer_[1] == value)
                     return true;
-                device::timer::us_delay(1ms);
+                timer::us_delay(1ms);
             }
             return false;
         };
@@ -70,7 +70,7 @@ public:
             for (int i = max_try_time; i-- > 0;) {
                 if (!write<SpiTransmitReceiveMode::BLOCK>(address, value))
                     return false;
-                device::timer::us_delay(1ms);
+                timer::us_delay(1ms);
                 if (!read<SpiTransmitReceiveMode::BLOCK>(address, 1))
                     return false;
                 assert(init_rx_buffer_ && init_rx_size_ == 2);
@@ -82,7 +82,7 @@ public:
 
         // Reset all registers to reset value.
         write<SpiTransmitReceiveMode::BLOCK>(RegisterAddress::GYRO_SOFTRESET, 0xB6);
-        device::timer::us_delay(1ms);
+        timer::us_delay(1ms);
 
         // "Who am I" check.
         assert(read_with_confirm(RegisterAddress::GYRO_CHIP_ID, 0x0F));
@@ -192,4 +192,4 @@ private:
 
 inline constinit Gyroscope::Lazy gyroscope(&spi1);
 
-} // namespace device::spi::bmi088
+} // namespace spi::bmi088

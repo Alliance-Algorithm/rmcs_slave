@@ -1,8 +1,8 @@
 #pragma once
 
-#include "device/usb/field.hpp"
+#include "app/usb/field.hpp"
 
-namespace device::spi::bmi088 {
+namespace spi::bmi088 {
 
 struct __attribute__((packed)) FieldHeader {
     usb::field::StatusId field_id : 4;
@@ -20,4 +20,4 @@ struct __attribute__((packed)) FieldHeader {
     }
 };
 
-} // namespace device::spi::bmi088
+} // namespace spi::bmi088

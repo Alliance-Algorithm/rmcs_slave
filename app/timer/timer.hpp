@@ -6,7 +6,6 @@
 #include "utility/immovable.hpp"
 #include "utility/lazy.hpp"
 
-namespace device {
 namespace timer {
 
 template <TIM_HandleTypeDef* hal_timer_handle>
@@ -22,4 +21,3 @@ public:
 inline constinit Timer<&htim2>::Lazy timer2;
 
 } // namespace timer
-} // namespace device

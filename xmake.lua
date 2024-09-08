@@ -23,10 +23,9 @@ target("application", function()
     -- 从CubeMX生成的Makefile中读取hal的源文件和头文件
     on_load("script.read_hal_makefile")
 
-    add_files("bsp/SEGGER/**.c", "bsp/SEGGER/**.S")
-
     -- 添加源文件和头文件
-    add_files("app/**.cpp", "device/**.cpp", "utility/**.cpp")
+    add_files("bsp/SEGGER/**.c", "bsp/SEGGER/**.S")
+    add_files("app/**.cpp", "utility/**.cpp")
     add_includedirs(".")
 
     -- 在任何模式下都生成调试信息

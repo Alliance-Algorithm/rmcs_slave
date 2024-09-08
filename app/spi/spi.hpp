@@ -10,7 +10,7 @@
 #include "utility/immovable.hpp"
 #include "utility/lazy.hpp"
 
-namespace device::spi {
+namespace spi {
 
 class SpiModuleInterface {
 public:
@@ -141,4 +141,4 @@ private:
 
 inline constinit Spi::Lazy spi1(&hspi1);
 
-} // namespace device::spi
+} // namespace spi

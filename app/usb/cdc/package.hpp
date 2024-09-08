@@ -9,7 +9,6 @@
 #include <new>
 #include <numeric>
 
-namespace device {
 namespace usb {
 
 constexpr size_t kPackageMaxSize = 64;
@@ -146,4 +145,3 @@ private:
 };
 
 } // namespace usb
-} // namespace device

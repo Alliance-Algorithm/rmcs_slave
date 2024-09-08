@@ -1,13 +1,11 @@
-#include "device/can/can.hpp"
-#include "device/usb/cdc/cdc.hpp"
+#include "app/can/can.hpp"
+#include "app/usb/cdc/cdc.hpp"
 
 #include <can.h>
 
 extern "C" {
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan) {
-    using namespace device;
-
     auto& can_lazy = hcan == &hcan1 ? can::can1 : can::can2;
     auto field_id  = hcan == &hcan1 ? usb::field::StatusId::CAN1_ : usb::field::StatusId::CAN2_;
 

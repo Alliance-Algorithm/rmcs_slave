@@ -7,13 +7,13 @@
 
 #include <can.h>
 
-#include "device/usb/field.hpp"
+#include "app/usb/field.hpp"
 #include "utility/immovable.hpp"
 #include "utility/interrupt_safe_buffer.hpp"
 #include "utility/lazy.hpp"
 #include "utility/ring_buffer.hpp"
 
-namespace device::can {
+namespace can {
 
 class Can : private utility::Immovable {
 public:
@@ -200,4 +200,4 @@ private:
 inline constinit Can::Lazy can1{&hcan1, 0, 14};
 inline constinit Can::Lazy can2{&hcan2, 14, 14};
 
-} // namespace device::can
+} // namespace can

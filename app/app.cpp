@@ -2,27 +2,28 @@
 
 #include <main.h>
 
-#include "device/can/can.hpp"
-#include "device/spi/bmi088/accel.hpp"
-#include "device/spi/bmi088/gyro.hpp"
-#include "device/uart/uart.hpp"
-#include "device/usb/cdc/cdc.hpp"
+#include "app/can/can.hpp"
+#include "app/spi/bmi088/accel.hpp"
+#include "app/spi/bmi088/gyro.hpp"
+#include "app/uart/uart.hpp"
+#include "app/usb/cdc/cdc.hpp"
 
 extern "C" {
-void AppEntry() { app::app->main(); }
+void AppEntry() { app->main(); }
 }
 
-app::App::App() = default;
+App::App() = default;
 
-[[noreturn]] void app::App::main() {
-    auto& cdc       = *device::usb::cdc;
-    auto& can1      = *device::can::can1;
-    auto& can2      = *device::can::can2;
-    auto& uart1     = *device::uart::uart1;
-    auto& uart2     = *device::uart::uart2;
-    auto& uart_dbus = *device::uart::uart_dbus;
-    auto& accel     = *device::spi::bmi088::accelerometer;
-    auto& gyro      = *device::spi::bmi088::gyroscope;
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+[[noreturn]] void App::main() {
+    auto& cdc       = *usb::cdc;
+    auto& can1      = *can::can1;
+    auto& can2      = *can::can2;
+    auto& uart1     = *uart::uart1;
+    auto& uart2     = *uart::uart2;
+    auto& uart_dbus = *uart::uart_dbus;
+    auto& accel     = *spi::bmi088::accelerometer;
+    auto& gyro      = *spi::bmi088::gyroscope;
 
     (void)accel;
     (void)gyro;
