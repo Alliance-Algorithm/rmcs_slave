@@ -8,8 +8,8 @@
 #include <can.h>
 
 #include "app/usb/field.hpp"
+#include "app/usb/interrupt_safe_buffer.hpp"
 #include "utility/immovable.hpp"
-#include "utility/interrupt_safe_buffer.hpp"
 #include "utility/lazy.hpp"
 #include "utility/ring_buffer.hpp"
 
@@ -72,7 +72,7 @@ public:
         uint32_t tsr = hcan->Instance->TSR;
         auto free_mailbox_count =
             !!(tsr & CAN_TSR_TME0) + !!(tsr & CAN_TSR_TME1) + !!(tsr & CAN_TSR_TME2);
-        
+
         return transmit_buffer_.pop_front_multi(
             [this, hcan](TransmitMailboxData&& mailbox_data) {
                 auto target_mailbox_index =
@@ -112,7 +112,7 @@ private:
     }
 
     bool read_device_write_buffer(
-        utility::InterruptSafeBuffer<64>& buffer_wrapper, usb::field::StatusId field_id) {
+        usb::InterruptSafeBuffer& buffer_wrapper, usb::field::StatusId field_id) {
         auto hal_can_state    = hal_can_handle_->State;
         auto hal_can_instance = hal_can_handle_->Instance;
 

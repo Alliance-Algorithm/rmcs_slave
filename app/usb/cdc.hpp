@@ -8,7 +8,7 @@
 #include <usbd_cdc.h>
 #include <usbd_def.h>
 
-#include "utility/interrupt_safe_buffer.hpp"
+#include "app/usb/interrupt_safe_buffer.hpp"
 #include "utility/lazy.hpp"
 
 namespace usb {
@@ -21,39 +21,26 @@ class Cdc : utility::Immovable {
 public:
     using Lazy = utility::Lazy<Cdc>;
 
-    Cdc() {
-        for (auto& buffer : transmit_buffers_) {
-            std::byte* start_of_packet = buffer.allocate(1);
-            assert(start_of_packet);
-            *start_of_packet = std::byte{0xAE};
-        }
-    };
+    Cdc() = default;
 
-    utility::InterruptSafeBuffer<64>& get_transmit_buffer() {
-        return transmit_buffers_[buffer_writing_.load(std::memory_order::relaxed)];
-    }
+    InterruptSafeBuffer& get_transmit_buffer() { return transmit_buffer_; }
 
     bool try_transmit() {
-        auto writing = buffer_writing_.load(std::memory_order::relaxed);
-        if (transmit_buffers_[writing].written_size() <= 1)
-            return false;
-
         if (!device_ready())
             return false;
 
-        transmit_buffers_[!writing].set_written_size(1);
-        std::atomic_signal_fence(std::memory_order::release);
-        buffer_writing_.store(!writing, std::memory_order::relaxed);
-        std::atomic_signal_fence(std::memory_order::release);
+        auto batch = transmit_buffer_.pop_batch();
+        if (!batch)
+            return false;
 
-        auto data = reinterpret_cast<uint8_t*>(transmit_buffers_[writing].data());
+        auto written_size = batch->written_size.load(std::memory_order::relaxed);
+        batch->written_size.store(1, std::memory_order::relaxed);
 
-        // Note: Must read written_size again here to avoid packet loss.
+        auto data = reinterpret_cast<uint8_t*>(batch->data);
+
         assert(
-            USBD_CDC_SetTxBuffer(&hUsbDeviceFS, data, transmit_buffers_[writing].written_size())
-                == USBD_OK
+            USBD_CDC_SetTxBuffer(&hUsbDeviceFS, data, written_size) == USBD_OK
             && USBD_CDC_TransmitPacket(&hUsbDeviceFS) == USBD_OK);
-
         return true;
     }
 
@@ -79,10 +66,8 @@ private:
     friend inline int8_t hal_cdc_receive_callback(uint8_t*, uint32_t*);
     friend inline int8_t hal_cdc_transmit_complete_callback(uint8_t*, uint32_t*, uint8_t);
 
-    alignas(int) inline static constinit std::byte receive_buffer_[64];
-
-    utility::InterruptSafeBuffer<64> transmit_buffers_[2];
-    std::atomic<uint8_t> buffer_writing_ = 0;
+    alignas(size_t) inline static constinit std::byte receive_buffer_[64];
+    InterruptSafeBuffer transmit_buffer_{};
 };
 
 inline constinit Cdc::Lazy cdc;

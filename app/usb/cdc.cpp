@@ -11,9 +11,7 @@ inline int8_t hal_cdc_init_callback() {
     return USBD_OK;
 }
 
-inline int8_t hal_cdc_deinit_callback() {
-    return USBD_OK;
-}
+inline int8_t hal_cdc_deinit_callback() { return USBD_OK; }
 
 inline int8_t hal_cdc_control_callback(uint8_t command, uint8_t* buffer, uint16_t length) {
     return USBD_OK;

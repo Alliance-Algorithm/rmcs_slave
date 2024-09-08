@@ -8,7 +8,7 @@
 #include <usart.h>
 
 #include "app/usb/field.hpp"
-#include "utility/interrupt_safe_buffer.hpp"
+#include "app/usb/interrupt_safe_buffer.hpp"
 #include "utility/lazy.hpp"
 
 namespace uart {
@@ -78,8 +78,7 @@ private:
     bool device_ready() { return hal_uart_handle_->gState == HAL_UART_STATE_READY; }
 
     bool read_device_write_buffer(
-        utility::InterruptSafeBuffer<64>& buffer_wrapper, usb::field::StatusId field_id,
-        uint16_t size) {
+        usb::InterruptSafeBuffer& buffer_wrapper, usb::field::StatusId field_id, uint16_t size) {
         assert(size);
 
         std::byte* buffer = buffer_wrapper.allocate(sizeof(FieldHeader) + (size > 15) + size);

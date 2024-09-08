@@ -10,7 +10,7 @@
 #include "app/spi/bmi088/field.hpp"
 #include "app/spi/spi.hpp"
 #include "app/timer/us_delay.hpp"
-#include "app/usb/cdc/cdc.hpp"
+#include "app/usb/cdc.hpp"
 
 namespace spi::bmi088 {
 
@@ -172,8 +172,7 @@ private:
         return false;
     }
 
-    static bool
-        read_device_write_buffer(utility::InterruptSafeBuffer<64>& buffer_wrapper, Data& data) {
+    static bool read_device_write_buffer(usb::InterruptSafeBuffer& buffer_wrapper, Data& data) {
         if (std::byte* buffer = buffer_wrapper.allocate(sizeof(FieldHeader) + sizeof(Data))) {
             *buffer = std::bit_cast<std::byte>(FieldHeader::accelerometer());
             buffer += sizeof(FieldHeader);

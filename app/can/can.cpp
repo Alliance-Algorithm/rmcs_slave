@@ -1,5 +1,5 @@
 #include "app/can/can.hpp"
-#include "app/usb/cdc/cdc.hpp"
+#include "app/usb/cdc.hpp"
 
 #include <can.h>
 

@@ -6,7 +6,7 @@
 #include "app/spi/bmi088/accel.hpp"
 #include "app/spi/bmi088/gyro.hpp"
 #include "app/uart/uart.hpp"
-#include "app/usb/cdc/cdc.hpp"
+#include "app/usb/cdc.hpp"
 
 extern "C" {
 void AppEntry() { app->main(); }

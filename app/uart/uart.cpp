@@ -1,6 +1,6 @@
 #include "uart.hpp"
 
-#include "app/usb/cdc/cdc.hpp"
+#include "app/usb/cdc.hpp"
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* hal_uart_handle, uint16_t size) {
     if (__HAL_UART_GET_FLAG(hal_uart_handle, UART_FLAG_IDLE))
