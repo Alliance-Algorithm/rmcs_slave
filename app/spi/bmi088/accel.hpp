@@ -9,7 +9,7 @@
 
 #include "app/spi/bmi088/field.hpp"
 #include "app/spi/spi.hpp"
-#include "app/timer/us_delay.hpp"
+#include "app/timer/delay.hpp"
 #include "app/usb/cdc.hpp"
 
 namespace spi::bmi088 {
@@ -55,7 +55,7 @@ public:
                 assert(init_rx_buffer_ && init_rx_size_ == 3);
                 if (init_rx_buffer_[2] == value)
                     return true;
-                timer::us_delay(1ms);
+                timer::delay(1ms);
             }
             return false;
         };
@@ -63,7 +63,7 @@ public:
             for (int i = max_try_time; i-- > 0;) {
                 if (!write<SpiTransmitReceiveMode::BLOCK>(address, value))
                     return false;
-                timer::us_delay(1ms);
+                timer::delay(1ms);
                 if (!read<SpiTransmitReceiveMode::BLOCK>(address, 1))
                     return false;
                 assert(init_rx_buffer_ && init_rx_size_ == 3);
@@ -75,11 +75,11 @@ public:
 
         // Dummy read to switch accelerometer to SPI mode
         read<SpiTransmitReceiveMode::BLOCK>(RegisterAddress::ACC_CHIP_ID, 1);
-        timer::us_delay(1ms);
+        timer::delay(1ms);
 
         // Reset all registers to reset value
         write<SpiTransmitReceiveMode::BLOCK>(RegisterAddress::ACC_SOFTRESET, 0xB6);
-        timer::us_delay(1ms);
+        timer::delay(1ms);
 
         // "Who am I" check.
         assert(read_with_confirm(RegisterAddress::ACC_CHIP_ID, 0x1E));

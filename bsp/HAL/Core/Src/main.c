@@ -86,9 +86,14 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+  
+  // Enable DWT (Data Watchpoint and Trace) for delay
+  CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+  DWT->CYCCNT = 0;
+  DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
 
-  extern __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END;
   // Generate USB PID from STM32 12-byte unique id using simple CRC-16 algorithm.
+  extern __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END;
   uint16_t pid  = 0xFFFF;
   uint8_t *data = (uint8_t*)0x1FFF7A10u;
   size_t len    = 12;
