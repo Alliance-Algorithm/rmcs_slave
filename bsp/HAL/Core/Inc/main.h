@@ -61,12 +61,6 @@ void AppEntry(void);
 #define SPI1_MISO_GPIO_Port GPIOB
 #define SPI1_SCK_Pin GPIO_PIN_3
 #define SPI1_SCK_GPIO_Port GPIOB
-#define LED_R_Pin GPIO_PIN_12
-#define LED_R_GPIO_Port GPIOH
-#define LED_G_Pin GPIO_PIN_11
-#define LED_G_GPIO_Port GPIOH
-#define LED_B_Pin GPIO_PIN_10
-#define LED_B_GPIO_Port GPIOH
 #define CS1_ACCEL_Pin GPIO_PIN_4
 #define CS1_ACCEL_GPIO_Port GPIOA
 #define INT1_ACC_Pin GPIO_PIN_4
