@@ -21,10 +21,7 @@ public:
         : hal_uart_handle_(hal_uart_handle)
         , max_receive_size_(max_receive_size) {
         assert(max_receive_size_ <= 64);
-        assert(
-            HAL_UARTEx_ReceiveToIdle_IT(
-                hal_uart_handle_, reinterpret_cast<uint8_t*>(receive_buffer_), max_receive_size_)
-            == HAL_OK);
+        assert(trigger_hal_receive());
     }
 
     bool read_buffer_write_device(std::byte*& buffer) {
@@ -50,11 +47,18 @@ public:
     }
 
     bool try_transmit() {
+        // Under normal circumstances, the trigger_hal_receive function is called within the
+        // interrupt service routine (ISR). However, if the ISR fails to execute for any reason, the
+        // UART will stop receiving data. Therefore, it is necessary to compensate for this
+        // situation by using polling. If the UART is idle, receiving should be triggered again.
+        if (device_reception_ready()) [[unlikely]]
+            trigger_hal_receive();
+
         auto writing = buffer_writing_.load(std::memory_order::relaxed);
         if (transmit_buffers_[writing].written_size.load(std::memory_order::relaxed) == 0)
             return false;
 
-        if (!device_ready())
+        if (!device_transmission_ready())
             return false;
 
         transmit_buffers_[!writing].written_size.store(0, std::memory_order::relaxed);
@@ -75,7 +79,8 @@ public:
 private:
     friend void ::HAL_UARTEx_RxEventCallback(UART_HandleTypeDef*, uint16_t);
 
-    bool device_ready() { return hal_uart_handle_->gState == HAL_UART_STATE_READY; }
+    bool device_transmission_ready() { return hal_uart_handle_->gState == HAL_UART_STATE_READY; }
+    bool device_reception_ready() { return hal_uart_handle_->RxState == HAL_UART_STATE_READY; }
 
     bool read_device_write_buffer(
         usb::InterruptSafeBuffer& buffer_wrapper, usb::field::StatusId field_id, uint16_t size) {
@@ -101,12 +106,15 @@ private:
             buffer += size;
         }
 
-        assert(
-            HAL_UARTEx_ReceiveToIdle_IT(
-                hal_uart_handle_, reinterpret_cast<uint8_t*>(receive_buffer_), max_receive_size_)
-            == HAL_OK);
+        assert(trigger_hal_receive());
 
         return static_cast<bool>(buffer);
+    }
+
+    bool trigger_hal_receive() {
+        return HAL_UARTEx_ReceiveToIdle_IT(
+                   hal_uart_handle_, reinterpret_cast<uint8_t*>(receive_buffer_), max_receive_size_)
+            == HAL_OK;
     }
 
     UART_HandleTypeDef* hal_uart_handle_;
