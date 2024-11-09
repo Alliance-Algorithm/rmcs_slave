@@ -24,6 +24,7 @@ App::App() = default;
     auto& uart_dbus = *uart::uart_dbus;
     auto& accel     = *spi::bmi088::accelerometer;
     auto& gyro      = *spi::bmi088::gyroscope;
+    __enable_irq();
 
     (void)accel;
     (void)gyro;
