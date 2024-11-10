@@ -33,20 +33,15 @@ inline int8_t hal_cdc_receive_callback(uint8_t* buffer, uint32_t* length) {
         auto field_id = std::launder(reinterpret_cast<Header*>(iterator))->field_id;
 
         if (field_id == field::CommandId::CAN1_) {
-            if (auto can = can::can1.try_get())
-                can->read_buffer_write_device(iterator);
+            can::can1->read_buffer_write_device(iterator);
         } else if (field_id == field::CommandId::CAN2_) {
-            if (auto can = can::can2.try_get())
-                can->read_buffer_write_device(iterator);
+            can::can2->read_buffer_write_device(iterator);
         } else if (field_id == field::CommandId::UART1_) {
-            if (auto uart = uart::uart1.try_get())
-                uart->read_buffer_write_device(iterator);
+            uart::uart1->read_buffer_write_device(iterator);
         } else if (field_id == field::CommandId::UART2_) {
-            if (auto uart = uart::uart2.try_get())
-                uart->read_buffer_write_device(iterator);
+            uart::uart2->read_buffer_write_device(iterator);
         } else if (field_id == field::CommandId::UART3_) {
-            if (auto uart = uart::uart_dbus.try_get())
-                uart->read_buffer_write_device(iterator);
+            uart::uart_dbus->read_buffer_write_device(iterator);
         } else
             break;
     }

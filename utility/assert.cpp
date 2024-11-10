@@ -23,7 +23,7 @@ void __assert_func(const char* file, int line, const char* function, const char*
     assert_function   = function;
     assert_expression = expression;
 
-    led::led->set_value(255, 0, 0);
+    led::led.init().set_value(255, 0, 0);
 
     while (true)
         __NOP();

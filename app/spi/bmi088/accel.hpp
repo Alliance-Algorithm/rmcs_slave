@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdint>
-
 #include <cstdio>
+
 #include <spi.h>
 #include <usbd_cdc.h>
 
@@ -39,7 +39,7 @@ public:
     explicit Accelerometer(
         Spi::Lazy* spi, Range range = Range::_6G, DataRate data_rate = DataRate::_1600)
         : SpiModuleInterface(CS1_ACCEL_GPIO_Port, CS1_ACCEL_Pin)
-        , spi_(spi->get())
+        , spi_(spi->init())
         , initialized_(false)
         , init_rx_buffer_(nullptr)
         , init_rx_size_(0) {
@@ -115,10 +115,8 @@ protected:
     void transmit_receive_callback(uint8_t* rx_buffer, size_t size) override {
         if (initialized_) {
             assert(size == sizeof(Data) + 2);
-            if (auto cdc = usb::cdc.try_get()) {
-                auto& data = *std::launder(reinterpret_cast<Data*>(rx_buffer + 2));
-                read_device_write_buffer(cdc->get_transmit_buffer(), data);
-            }
+            auto& data = *std::launder(reinterpret_cast<Data*>(rx_buffer + 2));
+            read_device_write_buffer(usb::cdc->get_transmit_buffer(), data);
         } else {
             init_rx_buffer_ = rx_buffer;
             init_rx_size_   = size;
@@ -155,7 +153,7 @@ private:
 
     template <SpiTransmitReceiveMode mode>
     bool write(RegisterAddress address, uint8_t value) {
-        if (auto task = spi_->create_transmit_receive_task<mode>(this, 2)) {
+        if (auto task = spi_.create_transmit_receive_task<mode>(this, 2)) {
             task->tx_buffer[0] = static_cast<uint8_t>(address);
             task->tx_buffer[1] = value;
             return true;
@@ -165,7 +163,7 @@ private:
 
     template <SpiTransmitReceiveMode mode>
     bool read(RegisterAddress address, size_t read_size) {
-        if (auto task = spi_->create_transmit_receive_task<mode>(this, read_size + 2)) {
+        if (auto task = spi_.create_transmit_receive_task<mode>(this, read_size + 2)) {
             task->tx_buffer[0] = 0x80 | static_cast<uint8_t>(address);
             return true;
         }
@@ -186,7 +184,7 @@ private:
         return false;
     }
 
-    Spi* const spi_;
+    Spi& spi_;
 
     bool initialized_;
 

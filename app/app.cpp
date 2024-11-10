@@ -9,35 +9,33 @@
 #include "app/usb/cdc.hpp"
 
 extern "C" {
-void AppEntry() { app->main(); }
+void AppEntry() { app.init().main(); }
 }
 
-App::App() = default;
+App::App() {
+    led::led.init();
+    usb::cdc.init();
+    can::can1.init();
+    can::can2.init();
+    uart::uart1.init();
+    uart::uart2.init();
+    uart::uart_dbus.init();
+    spi::bmi088::accelerometer.init();
+    spi::bmi088::gyroscope.init();
+    __enable_irq();
+};
 
 [[noreturn]] void App::main() {
-    auto& cdc       = *usb::cdc;
-    auto& can1      = *can::can1;
-    auto& can2      = *can::can2;
-    auto& uart1     = *uart::uart1;
-    auto& uart2     = *uart::uart2;
-    auto& uart_dbus = *uart::uart_dbus;
-    auto& accel     = *spi::bmi088::accelerometer;
-    auto& gyro      = *spi::bmi088::gyroscope;
-    __enable_irq();
-
-    (void)accel;
-    (void)gyro;
-
     while (true) {
-        cdc.try_transmit();
-        can1.try_transmit();
-        cdc.try_transmit();
-        can2.try_transmit();
-        cdc.try_transmit();
-        uart1.try_transmit();
-        cdc.try_transmit();
-        uart2.try_transmit();
-        cdc.try_transmit();
-        uart_dbus.try_transmit();
+        usb::cdc->try_transmit();
+        can::can1->try_transmit();
+        usb::cdc->try_transmit();
+        can::can2->try_transmit();
+        usb::cdc->try_transmit();
+        uart::uart1->try_transmit();
+        usb::cdc->try_transmit();
+        uart::uart2->try_transmit();
+        usb::cdc->try_transmit();
+        uart::uart_dbus->try_transmit();
     }
 }
