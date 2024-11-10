@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdio>
+
 #include <optional>
 
 #include <spi.h>

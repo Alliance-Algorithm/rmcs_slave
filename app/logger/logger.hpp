@@ -13,7 +13,6 @@ public:
 
     Logger() { SEGGER_RTT_Init(); }
 
-    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     int printf(const char* fmt, ...) {
         va_list args;
         va_start(args, fmt);

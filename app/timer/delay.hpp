@@ -4,7 +4,6 @@
 #include <cstdint>
 
 #include <chrono>
-#include <limits>
 #include <ratio>
 
 #include <stm32f407xx.h>
@@ -23,11 +22,11 @@ inline void delay_basic(SysFreqDuration delay) {
 
     if (end < start) { // Overflow
         while (DWT->CYCCNT >= start)
-            __NOP();
+            ;
     }
 
     while (DWT->CYCCNT < end)
-        __NOP();
+        ;
 }
 
 template <std::integral Rep, typename Period>
