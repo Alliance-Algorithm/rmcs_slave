@@ -6,6 +6,7 @@
 #include <atomic>
 #include <bit>
 
+#include "app/led/led.hpp"
 #include "utility/immovable.hpp"
 
 namespace usb {
@@ -40,9 +41,11 @@ public:
                     return result;
             }
 
-            auto writeable = batch_count - (in - out) - 1;
-            if (!writeable)
+            auto writeable = batch_count - readable - 1;
+            if (!writeable) {
+                led::led->uplink_buffer_full();
                 return nullptr;
+            }
 
             in_.compare_exchange_weak(in, in + 1, std::memory_order::relaxed);
         }
