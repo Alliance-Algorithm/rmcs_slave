@@ -4,11 +4,13 @@
 
 namespace usb::field {
 
-// All id enumeration items have a FUCKING underscore.
-// Because the FUCKING HAL library defines these SHORT words as FUCKING GLOBAL macros.
+// All id enumeration items have a underscore.
+// Because the HAL library defines these SHORT words as GLOBAL macros.
 
-enum class StatusId : uint8_t {
-    RESERVED_ = 0,
+// Note: id only occupies 4 bits, the remaining are defined independently by each field.
+
+enum class UplinkId : uint8_t {
+    CONTROL_ = 0,
 
     GPIO_ = 1,
 
@@ -26,8 +28,8 @@ enum class StatusId : uint8_t {
     IMU_ = 11,
 };
 
-enum class CommandId : uint8_t {
-    RESERVED_ = 0,
+enum class DownlinkId : uint8_t {
+    CONTROL_ = 0,
 
     GPIO_ = 1,
 

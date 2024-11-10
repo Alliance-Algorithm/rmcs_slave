@@ -59,6 +59,7 @@ public:
         } else {
             alignas(TransmitMailboxData) std::byte dummy[sizeof(TransmitMailboxData)];
             construct(dummy);
+            led::led->downlink_buffer_full();
             return false;
         }
     }
@@ -113,7 +114,7 @@ private:
     }
 
     bool read_device_write_buffer(
-        usb::InterruptSafeBuffer& buffer_wrapper, usb::field::StatusId field_id) {
+        usb::InterruptSafeBuffer& buffer_wrapper, usb::field::UplinkId field_id) {
         auto hal_can_state    = hal_can_handle_->State;
         auto hal_can_instance = hal_can_handle_->Instance;
 

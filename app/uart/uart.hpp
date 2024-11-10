@@ -7,6 +7,7 @@
 
 #include <usart.h>
 
+#include "app/led/led.hpp"
 #include "app/usb/field.hpp"
 #include "app/usb/interrupt_safe_buffer.hpp"
 #include "utility/assert.hpp"
@@ -44,7 +45,10 @@ public:
         std::memcpy(&transmit_buffer.data[written_size], buffer, size_allowed);
         buffer += size;
 
-        return size_allowed == size;
+        bool completed = size_allowed == size;
+        if (!completed) [[unlikely]]
+            led::led->downlink_buffer_full();
+        return completed;
     }
 
     bool try_transmit() {
@@ -84,7 +88,7 @@ private:
     bool device_reception_ready() { return hal_uart_handle_->RxState == HAL_UART_STATE_READY; }
 
     bool read_device_write_buffer(
-        usb::InterruptSafeBuffer& buffer_wrapper, usb::field::StatusId field_id, uint16_t size) {
+        usb::InterruptSafeBuffer& buffer_wrapper, usb::field::UplinkId field_id, uint16_t size) {
         assert(size);
 
         std::byte* buffer = buffer_wrapper.allocate(sizeof(FieldHeader) + (size > 15) + size);
