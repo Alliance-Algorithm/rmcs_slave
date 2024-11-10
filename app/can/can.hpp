@@ -67,7 +67,7 @@ public:
         auto hcan = hal_can_handle_;
 
         auto state = hcan->State;
-        assert((state == HAL_CAN_STATE_READY) || (state == HAL_CAN_STATE_LISTENING));
+        assert_always((state == HAL_CAN_STATE_READY) || (state == HAL_CAN_STATE_LISTENING));
 
         uint32_t tsr = hcan->Instance->TSR;
         auto free_mailbox_count =
@@ -77,7 +77,7 @@ public:
             [this, hcan](TransmitMailboxData&& mailbox_data) {
                 auto target_mailbox_index =
                     (hcan->Instance->TSR & CAN_TSR_CODE) >> CAN_TSR_CODE_Pos;
-                assert(target_mailbox_index <= 2);
+                assert_always(target_mailbox_index <= 2);
 
                 auto& target_mailbox = hal_can_handle_->Instance->sTxMailBox[target_mailbox_index];
                 target_mailbox.TDTR  = mailbox_data.data_length_and_timestamp;
@@ -106,9 +106,10 @@ private:
         sFilterConfig.SlaveStartFilterBank = hal_slave_start_filter_bank;
 
         constexpr auto ok = HAL_OK;
-        assert(HAL_CAN_ConfigFilter(hal_can_handle_, &sFilterConfig) == ok);
-        assert(HAL_CAN_Start(hal_can_handle_) == ok);
-        assert(HAL_CAN_ActivateNotification(hal_can_handle_, CAN_IT_RX_FIFO0_MSG_PENDING) == ok);
+        assert_always(HAL_CAN_ConfigFilter(hal_can_handle_, &sFilterConfig) == ok);
+        assert_always(HAL_CAN_Start(hal_can_handle_) == ok);
+        assert_always(
+            HAL_CAN_ActivateNotification(hal_can_handle_, CAN_IT_RX_FIFO0_MSG_PENDING) == ok);
     }
 
     bool read_device_write_buffer(
@@ -116,9 +117,9 @@ private:
         auto hal_can_state    = hal_can_handle_->State;
         auto hal_can_instance = hal_can_handle_->Instance;
 
-        assert(
+        assert_always(
             (hal_can_state == HAL_CAN_STATE_READY) || (hal_can_state == HAL_CAN_STATE_LISTENING));
-        assert((hal_can_instance->RF0R & CAN_RF0R_FMP0) != 0U); // Assert if rx_fifo is empty
+        assert_always((hal_can_instance->RF0R & CAN_RF0R_FMP0) != 0U); // Assert if rx_fifo is empty
 
         auto hal_can_instance_rir  = hal_can_instance->sFIFOMailBox[CAN_RX_FIFO0].RIR;
         auto hal_can_instance_rdtr = hal_can_instance->sFIFOMailBox[CAN_RX_FIFO0].RDTR;

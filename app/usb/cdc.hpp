@@ -38,7 +38,7 @@ public:
 
         auto data = reinterpret_cast<uint8_t*>(batch->data);
 
-        assert(
+        assert_always(
             USBD_CDC_SetTxBuffer(&hUsbDeviceFS, data, written_size) == USBD_OK
             && USBD_CDC_TransmitPacket(&hUsbDeviceFS) == USBD_OK);
         return true;

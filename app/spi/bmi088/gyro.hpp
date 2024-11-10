@@ -59,7 +59,7 @@ public:
             for (int i = max_try_time; i-- > 0;) {
                 if (!read<SpiTransmitReceiveMode::BLOCK>(address, 1))
                     return false;
-                assert(init_rx_buffer_ && init_rx_size_ == 2);
+                assert_always(init_rx_buffer_ && init_rx_size_ == 2);
                 if (init_rx_buffer_[1] == value)
                     return true;
                 timer::delay(1ms);
@@ -73,7 +73,7 @@ public:
                 timer::delay(1ms);
                 if (!read<SpiTransmitReceiveMode::BLOCK>(address, 1))
                     return false;
-                assert(init_rx_buffer_ && init_rx_size_ == 2);
+                assert_always(init_rx_buffer_ && init_rx_size_ == 2);
                 if (init_rx_buffer_[1] == value)
                     return true;
             }
@@ -85,24 +85,24 @@ public:
         timer::delay(1ms);
 
         // "Who am I" check.
-        assert(read_with_confirm(RegisterAddress::GYRO_CHIP_ID, 0x0F));
+        assert_always(read_with_confirm(RegisterAddress::GYRO_CHIP_ID, 0x0F));
 
         // Enables the new data interrupt.
-        assert(write_with_confirm(RegisterAddress::GYRO_INT_CTRL, 0x80));
+        assert_always(write_with_confirm(RegisterAddress::GYRO_INT_CTRL, 0x80));
 
         // Set both INT3 and INT4 as push-pull, active-low, even though only INT3 is used.
-        assert(write_with_confirm(RegisterAddress::INT3_INT4_IO_CONF, 0b0000));
+        assert_always(write_with_confirm(RegisterAddress::INT3_INT4_IO_CONF, 0b0000));
         // Map data ready interrupt to INT3 pin.
-        assert(write_with_confirm(RegisterAddress::INT3_INT4_IO_MAP, 0x01));
+        assert_always(write_with_confirm(RegisterAddress::INT3_INT4_IO_MAP, 0x01));
 
         // Set ODR (output data rate, Hz) and filter bandwidth (Hz).
-        assert(
+        assert_always(
             write_with_confirm(RegisterAddress::GYRO_BANDWIDTH, 0x80 | static_cast<uint8_t>(rate)));
         // Set data range.
-        assert(write_with_confirm(RegisterAddress::GYRO_RANGE, static_cast<uint8_t>(range)));
+        assert_always(write_with_confirm(RegisterAddress::GYRO_RANGE, static_cast<uint8_t>(range)));
 
         // Switch the main power mode into normal mode.
-        assert(write_with_confirm(RegisterAddress::GYRO_LPM1, 0x00));
+        assert_always(write_with_confirm(RegisterAddress::GYRO_LPM1, 0x00));
 
         initialized_ = true;
     }

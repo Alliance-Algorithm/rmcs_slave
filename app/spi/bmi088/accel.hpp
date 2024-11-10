@@ -52,7 +52,7 @@ public:
             for (int i = max_try_time; i-- > 0;) {
                 if (!read<SpiTransmitReceiveMode::BLOCK>(address, 1))
                     return false;
-                assert(init_rx_buffer_ && init_rx_size_ == 3);
+                assert_always(init_rx_buffer_ && init_rx_size_ == 3);
                 if (init_rx_buffer_[2] == value)
                     return true;
                 timer::delay(1ms);
@@ -66,7 +66,7 @@ public:
                 timer::delay(1ms);
                 if (!read<SpiTransmitReceiveMode::BLOCK>(address, 1))
                     return false;
-                assert(init_rx_buffer_ && init_rx_size_ == 3);
+                assert_always(init_rx_buffer_ && init_rx_size_ == 3);
                 if (init_rx_buffer_[2] == value)
                     return true;
             }
@@ -82,24 +82,24 @@ public:
         timer::delay(1ms);
 
         // "Who am I" check.
-        assert(read_with_confirm(RegisterAddress::ACC_CHIP_ID, 0x1E));
+        assert_always(read_with_confirm(RegisterAddress::ACC_CHIP_ID, 0x1E));
 
         // Enable INT1 as output pin, push-pull, active-low.
-        assert(write_with_confirm(RegisterAddress::INT1_IO_CTRL, 0b00001000));
+        assert_always(write_with_confirm(RegisterAddress::INT1_IO_CTRL, 0b00001000));
         // Map data ready interrupt to pin INT1.
-        assert(write_with_confirm(RegisterAddress::INT_MAP_DATA, 0b00000100));
+        assert_always(write_with_confirm(RegisterAddress::INT_MAP_DATA, 0b00000100));
 
         // Set ODR (output data rate) = 1600 and OSR (over-sampling-ratio) = 1.
-        assert(write_with_confirm(
+        assert_always(write_with_confirm(
             RegisterAddress::ACC_CONF,
             0x80 | (0x02 << 4) | (static_cast<uint8_t>(data_rate) << 0)));
         // Set Accelerometer range.
-        assert(write_with_confirm(RegisterAddress::ACC_RANGE, static_cast<uint8_t>(range)));
+        assert_always(write_with_confirm(RegisterAddress::ACC_RANGE, static_cast<uint8_t>(range)));
 
         // Switch the accelerometer into active mode.
-        assert(write_with_confirm(RegisterAddress::ACC_PWR_CONF, 0x00));
+        assert_always(write_with_confirm(RegisterAddress::ACC_PWR_CONF, 0x00));
         // Turn on the accelerometer.
-        assert(write_with_confirm(RegisterAddress::ACC_PWR_CTRL, 0x04));
+        assert_always(write_with_confirm(RegisterAddress::ACC_PWR_CTRL, 0x04));
 
         initialized_ = true;
     }

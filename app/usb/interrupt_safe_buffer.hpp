@@ -22,7 +22,7 @@ public:
     constexpr InterruptSafeBuffer() {
         for (auto& batch : batches_) {
             std::byte* start_of_packet = batch.allocate(1);
-            assert(start_of_packet);
+            assert_always(start_of_packet);
             *start_of_packet = std::byte{0xAE};
         }
     };

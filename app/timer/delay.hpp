@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdint>
 #include <cassert>
+#include <cstdint>
 
 #include <chrono>
 #include <limits>

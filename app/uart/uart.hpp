@@ -21,8 +21,8 @@ public:
     explicit Uart(UART_HandleTypeDef* hal_uart_handle, uint16_t max_receive_size)
         : hal_uart_handle_(hal_uart_handle)
         , max_receive_size_(max_receive_size) {
-        assert(max_receive_size_ <= 64);
-        assert(trigger_hal_receive());
+        assert_always(max_receive_size_ <= 64);
+        assert_always(trigger_hal_receive());
     }
 
     bool read_buffer_write_device(std::byte*& buffer) {
@@ -68,7 +68,7 @@ public:
         std::atomic_signal_fence(std::memory_order::release);
 
         // Note: Must read written_size again here to avoid data loss.
-        assert(
+        assert_always(
             HAL_UART_Transmit_IT(
                 hal_uart_handle_, reinterpret_cast<uint8_t*>(transmit_buffers_[writing].data),
                 transmit_buffers_[writing].written_size.load(std::memory_order::relaxed))
@@ -107,7 +107,7 @@ private:
             buffer += size;
         }
 
-        assert(trigger_hal_receive());
+        assert_always(trigger_hal_receive());
 
         return static_cast<bool>(buffer);
     }
