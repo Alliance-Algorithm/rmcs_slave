@@ -14,7 +14,6 @@ void AppEntry() { app->main(); }
 
 App::App() = default;
 
-// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 [[noreturn]] void App::main() {
     auto& cdc       = *usb::cdc;
     auto& can1      = *can::can1;
