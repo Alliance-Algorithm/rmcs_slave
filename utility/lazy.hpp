@@ -61,7 +61,7 @@ private:
         std::construct_at(std::addressof(object), std::get<I>(std::forward<TupleT>(t))...);
     }
 
-    enum class InitStatus : uint8_t { UNINITIALIZED = 0, INITIALIZING = 1, INITIALIZED = 2 };
+    enum class InitStatus : uint8_t { UNINITIALIZED = 2, INITIALIZING = 1, INITIALIZED = 0 };
     std::atomic<InitStatus> init_status_;
 
     union {
