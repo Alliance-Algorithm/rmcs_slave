@@ -1,14 +1,15 @@
 #pragma once
 
-#include <atomic>
-#include <cassert>
 #include <cstdint>
 #include <cstring>
+
+#include <atomic>
 
 #include <usart.h>
 
 #include "app/usb/field.hpp"
 #include "app/usb/interrupt_safe_buffer.hpp"
+#include "utility/assert.hpp"
 #include "utility/lazy.hpp"
 
 namespace uart {

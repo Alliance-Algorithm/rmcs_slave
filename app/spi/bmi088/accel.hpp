@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cassert>
 #include <cstdint>
 
 #include <cstdio>
@@ -11,6 +10,7 @@
 #include "app/spi/spi.hpp"
 #include "app/timer/delay.hpp"
 #include "app/usb/cdc.hpp"
+#include "utility/assert.hpp"
 
 namespace spi::bmi088 {
 

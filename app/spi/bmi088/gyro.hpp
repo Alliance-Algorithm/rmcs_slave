@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cassert>
 #include <cstdint>
 
 #include <cstdio>
@@ -12,6 +11,7 @@
 #include "app/timer/delay.hpp"
 #include "app/usb/cdc.hpp"
 #include "app/usb/interrupt_safe_buffer.hpp"
+#include "utility/assert.hpp"
 namespace spi::bmi088 {
 
 class Gyroscope final : SpiModuleInterface {

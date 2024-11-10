@@ -1,9 +1,8 @@
 #pragma once
 
-#include <cassert>
-
 #include <main.h>
 
+#include "utility/assert.hpp"
 #include "utility/immovable.hpp"
 
 namespace utility {

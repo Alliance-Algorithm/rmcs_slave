@@ -1,12 +1,12 @@
 #pragma once
 
-#include <cassert>
 #include <cstddef>
 
 #include <atomic>
 #include <bit>
 
 #include "app/led/led.hpp"
+#include "utility/assert.hpp"
 #include "utility/immovable.hpp"
 
 namespace usb {

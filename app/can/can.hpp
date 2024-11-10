@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
@@ -9,6 +8,7 @@
 
 #include "app/usb/field.hpp"
 #include "app/usb/interrupt_safe_buffer.hpp"
+#include "utility/assert.hpp"
 #include "utility/immovable.hpp"
 #include "utility/lazy.hpp"
 #include "utility/ring_buffer.hpp"

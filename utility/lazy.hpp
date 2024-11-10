@@ -1,9 +1,11 @@
 #pragma once
 
-#include <algorithm>
-#include <cassert>
 #include <cstdint>
 #include <tuple>
+
+#include <algorithm>
+
+#include "utility/assert.hpp"
 
 namespace utility {
 
