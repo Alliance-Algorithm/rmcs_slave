@@ -80,7 +80,7 @@
 #define USBD_LANGID_STRING     1033
 #define USBD_MANUFACTURER_STRING     "Alliance RoboMaster Team."
 #define USBD_PID_FS     0
-#define USBD_PRODUCT_STRING_FS     "RMCS Slave v2"
+#define USBD_PRODUCT_STRING_FS     "RMCS Slave v" APP_VERSION
 #define USBD_CONFIGURATION_STRING_FS     "CDC Config"
 #define USBD_INTERFACE_STRING_FS     "CDC Interface"
 

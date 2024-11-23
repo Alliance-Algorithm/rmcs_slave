@@ -9,7 +9,11 @@ set_config("plat", "cross")           -- 交叉编译
 set_config("cross", "arm-none-eabi-") -- 设置交叉编译平台
 set_toolchains("gnu-rm")              -- 使用gnu-arm工具链
 
-target("application", function()
+target("application", function(t)
+    local version = "2.1.0"
+    set_version(version)
+    add_defines("APP_VERSION=\"" .. version .. "\"")
+
     set_kind("binary")
     add_rules("c++", "asm")
     set_extension(".elf")
@@ -18,7 +22,7 @@ target("application", function()
         set_optimize("fastest")
     elseif is_mode("release") then -- 发布模式，开启O3优化和NDEBUG标志
         set_optimize("fastest")
-        add_cxflags("-DNDEBUG")
+        add_defines("NDEBUG")
     end
 
     -- 从CubeMX生成的Makefile中读取hal的源文件和头文件
