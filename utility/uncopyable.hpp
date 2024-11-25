@@ -2,13 +2,13 @@
 
 namespace utility {
 
-class Uncopyable {
+class Uncopyble {
 public:
-    Uncopyable()                             = default;
-    Uncopyable(const Uncopyable&)            = delete;
-    Uncopyable& operator=(const Uncopyable&) = delete;
-    Uncopyable(Uncopyable&&)                 = default;
-    Uncopyable& operator=(Uncopyable&&)      = default;
+    Uncopyble()                            = default;
+    Uncopyble(const Uncopyble&)            = delete;
+    Uncopyble& operator=(const Uncopyble&) = delete;
+    Uncopyble(Uncopyble&&)                 = default;
+    Uncopyble& operator=(Uncopyble&&)      = default;
 };
 
 } // namespace utility
