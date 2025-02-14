@@ -10,7 +10,7 @@ set_config("cross", "arm-none-eabi-") -- 设置交叉编译平台
 set_toolchains("gnu-rm")              -- 使用gnu-arm工具链
 
 target("application", function(t)
-    local version = "2.1.0"
+    local version = "2.1.2"
     set_version(version)
     add_defines("APP_VERSION=\"" .. version .. "\"")
 
