@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -31,8 +31,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "main.h"
-#include "stm32f4xx.h"
-#include "stm32f4xx_hal.h"
+#include "stm32h7xx.h"
+#include "stm32h7xx_hal.h"
 
 /* USER CODE BEGIN INCLUDE */
 
@@ -71,7 +71,7 @@
 /*---------- -----------*/
 #define USBD_DEBUG_LEVEL     0U
 /*---------- -----------*/
-#define USBD_LPM_ENABLED     0U
+#define USBD_LPM_ENABLED     1U
 /*---------- -----------*/
 #define USBD_SELF_POWERED     1U
 

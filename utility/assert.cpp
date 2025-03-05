@@ -9,6 +9,7 @@
 #include <main.h>
 
 #include "app/led/led.hpp"
+#include "app/logger/logger.hpp"
 
 const char* assert_file       = nullptr;
 int assert_line               = 0;
@@ -25,6 +26,7 @@ void __assert_func(const char* file, int line, const char* function, const char*
 
     led::led.init().set_value(255, 0, 0);
 
+    logger::logger.init().printf("Assertion failed: %s, file %s, line %d, function %s\n", expression, file, line, function);
     while (true)
         __NOP();
 }

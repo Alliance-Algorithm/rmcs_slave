@@ -14,7 +14,7 @@
 namespace usb {
 
 extern "C" {
-extern USBD_HandleTypeDef hUsbDeviceFS;
+extern USBD_HandleTypeDef hUsbDeviceHS;
 }
 
 class Cdc : utility::Immovable {
@@ -47,8 +47,8 @@ public:
         auto data = reinterpret_cast<uint8_t*>(batch->data);
 
         assert_always(
-            USBD_CDC_SetTxBuffer(&hUsbDeviceFS, data, written_size) == USBD_OK
-            && USBD_CDC_TransmitPacket(&hUsbDeviceFS) == USBD_OK);
+            USBD_CDC_SetTxBuffer(&hUsbDeviceHS, data, written_size) == USBD_OK
+            && USBD_CDC_TransmitPacket(&hUsbDeviceHS) == USBD_OK);
         return true;
     }
 
@@ -59,7 +59,7 @@ private:
         // compiler optimization.
 
         auto hal_cdc_handle_atomic =
-            std::atomic_ref<void*>(hUsbDeviceFS.pClassDataCmsit[hUsbDeviceFS.classId]);
+            std::atomic_ref<void*>(hUsbDeviceHS.pClassDataCmsit[hUsbDeviceHS.classId]);
         void* hal_cdc_handle = hal_cdc_handle_atomic.load(std::memory_order_relaxed);
 
         if (!hal_cdc_handle)

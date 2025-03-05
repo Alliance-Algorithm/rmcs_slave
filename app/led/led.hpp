@@ -4,7 +4,7 @@
 
 #include <atomic>
 
-#include <tim.h>
+#include <spi.h>
 
 #include "utility/lazy.hpp"
 
@@ -13,9 +13,6 @@ namespace led {
 class Led {
 public:
     Led() {
-        HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_1);
-        HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
-        HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
         reset();
     };
 
@@ -58,41 +55,55 @@ public:
 
         if (uplink_full && downlink_full) {
             // Both full: yellow and aqua lights flashing alternately
-            if (tick & 128)
-                set_value(255, 255, 0);
+            if (tick >> trigger_tick_prescaler & 0x01)
+                set_value(max_light, max_light, 0);
             else
-                set_value(0, 255, 255);
+                set_value(0, max_light, max_light);
         } else if (uplink_full) {
             // Uplink full: yellow light flashing
-            if (tick & 128)
-                set_value(255, 255, 0);
+            if (tick >> trigger_tick_prescaler & 0x01)
+                set_value(max_light, max_light, 0);
             else
                 set_value(0, 0, 0);
         } else if (downlink_full) {
             // Downlink full: aqua light flashing
-            if (tick & 128)
+            if (tick >> trigger_tick_prescaler & 0x01)
                 set_value(0, 0, 0);
             else
-                set_value(0, 255, 255);
+                set_value(0, max_light, max_light);
         } else {
-            // Working well: green breathing light
-            auto brightness = (tick >> 2) & 511;
-            if (brightness > 255)
-                brightness = 511 - brightness;
-            set_value(0, brightness, 0);
+            // Working well: green light
+            set_value(0, max_light, 0);
         }
     }
 
     void set_value(uint8_t red, uint8_t green, uint8_t blue) {
-        htim5.Instance->CCR1 = blue;
-        htim5.Instance->CCR2 = green;
-        htim5.Instance->CCR3 = red;
+        static uint32_t color, last_color = 0;
+        color = (red << 16) | (green << 8) | blue;
+        if (color == last_color)
+            return;
+        last_color = color;
+
+        static uint8_t txbuf[124] = {0};
+        const uint8_t WS2812_HighLevel = 0xf0;
+        const uint8_t WS2812_LowLevel  = 0xC0;
+        for (int i = 0; i < 8; i++)
+        {
+            txbuf[7-i]  = (((green >> i) & 0x01) ? WS2812_HighLevel : WS2812_LowLevel)>>1;
+            txbuf[15-i] = (((red >> i) & 0x01) ? WS2812_HighLevel : WS2812_LowLevel)>>1;
+            txbuf[23-i] = (((blue >> i) & 0x01) ? WS2812_HighLevel : WS2812_LowLevel)>>1;
+        }
+        HAL_SPI_Transmit(&hspi6, (uint8_t *)txbuf, 124, 100);
     }
 
 private:
     std::atomic<bool> user_controlling_;
 
     std::atomic<uint16_t> uplink_full_reset_counter_, downlink_full_reset_counter_;
+
+    std::uint8_t max_light = 60;
+
+    std::uint32_t trigger_tick_prescaler = 8;
 };
 
 inline utility::Lazy<Led> led;

@@ -8,17 +8,21 @@
 #include "app/uart/uart.hpp"
 #include "app/usb/cdc.hpp"
 
+#include "app/logger/logger.hpp"
 extern "C" {
 void AppEntry() { app.init().main(); }
 }
 
 App::App() {
+    logger::logger.init().printf("Init...\n");
     led::led.init();
     usb::cdc.init();
     can::can1.init();
     can::can2.init();
+    can::can3.init();
     uart::uart1.init();
     uart::uart2.init();
+    uart::uart3.init();
     uart::uart_dbus.init();
     spi::bmi088::accelerometer.init();
     spi::bmi088::gyroscope.init();
