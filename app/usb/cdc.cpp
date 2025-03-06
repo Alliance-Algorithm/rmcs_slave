@@ -7,7 +7,7 @@
 namespace usb {
 
 inline int8_t hal_cdc_init_callback() {
-    USBD_CDC_SetRxBuffer(&hUsbDeviceFS, reinterpret_cast<uint8_t*>(Cdc::receive_buffer_));
+    USBD_CDC_SetRxBuffer(&hUsbDeviceHS, reinterpret_cast<uint8_t*>(Cdc::receive_buffer_));
     return USBD_OK;
 }
 
@@ -38,19 +38,23 @@ inline int8_t hal_cdc_receive_callback(uint8_t* buffer, uint32_t* length) {
             can::can1->read_buffer_write_device(iterator);
         } else if (field_id == field::DownlinkId::CAN2_) {
             can::can2->read_buffer_write_device(iterator);
+        } else if (field_id == field::DownlinkId::CAN3_) {
+            can::can3->read_buffer_write_device(iterator);
         } else if (field_id == field::DownlinkId::UART1_) {
             uart::uart1->read_buffer_write_device(iterator);
         } else if (field_id == field::DownlinkId::UART2_) {
             uart::uart2->read_buffer_write_device(iterator);
         } else if (field_id == field::DownlinkId::UART3_) {
             uart::uart_dbus->read_buffer_write_device(iterator);
+        } else if (field_id == field::DownlinkId::UART4_) {
+            uart::uart3->read_buffer_write_device(iterator);
         } else
             break;
     }
     assert(iterator == sentinel); // TODO
 
-    USBD_CDC_SetRxBuffer(&hUsbDeviceFS, buffer);
-    USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+    USBD_CDC_SetRxBuffer(&hUsbDeviceHS, buffer);
+    USBD_CDC_ReceivePacket(&hUsbDeviceHS);
     return USBD_OK;
 }
 
@@ -60,7 +64,7 @@ inline int8_t
 }
 
 extern "C" {
-USBD_CDC_ItfTypeDef USBD_Interface_fops_FS = {
+USBD_CDC_ItfTypeDef USBD_Interface_fops_HS = {
     hal_cdc_init_callback, hal_cdc_deinit_callback, hal_cdc_control_callback,
     hal_cdc_receive_callback, hal_cdc_transmit_complete_callback};
 }

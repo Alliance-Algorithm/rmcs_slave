@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -104,7 +104,7 @@
   */
 
 /** Descriptor for the Usb device. */
-extern USBD_DescriptorsTypeDef FS_Desc;
+extern USBD_DescriptorsTypeDef HS_Desc;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 

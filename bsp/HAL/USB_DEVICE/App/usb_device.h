@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -27,8 +27,8 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx.h"
-#include "stm32f4xx_hal.h"
+#include "stm32h7xx.h"
+#include "stm32h7xx_hal.h"
 #include "usbd_def.h"
 
 /* USER CODE BEGIN INCLUDE */

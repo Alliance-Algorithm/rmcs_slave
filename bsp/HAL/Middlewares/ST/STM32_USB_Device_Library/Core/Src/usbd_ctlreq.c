@@ -84,8 +84,6 @@ static void USBD_SetFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 static void USBD_ClrFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
 static uint8_t USBD_GetLen(uint8_t *buf);
 
-uint8_t handle_wcid_requests(USBD_HandleTypeDef* device, USBD_SetupReqTypedef* request);
-
 /**
   * @}
   */
@@ -106,9 +104,6 @@ uint8_t handle_wcid_requests(USBD_HandleTypeDef* device, USBD_SetupReqTypedef* r
 USBD_StatusTypeDef USBD_StdDevReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
   USBD_StatusTypeDef ret = USBD_OK;
-
-  if (handle_wcid_requests(pdev, req))
-    return ret;
 
   switch (req->bmRequest & USB_REQ_TYPE_MASK)
   {

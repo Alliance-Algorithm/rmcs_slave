@@ -72,18 +72,24 @@ public:
             }
             return false;
         };
-
         // Dummy read to switch accelerometer to SPI mode
         read<SpiTransmitReceiveMode::BLOCK>(RegisterAddress::ACC_CHIP_ID, 1);
         timer::delay(1ms);
+        HAL_Delay(1);
+        read<SpiTransmitReceiveMode::BLOCK>(RegisterAddress::ACC_CHIP_ID, 1);
+        timer::delay(1ms);
+        HAL_Delay(1);
 
         // Reset all registers to reset value
         write<SpiTransmitReceiveMode::BLOCK>(RegisterAddress::ACC_SOFTRESET, 0xB6);
         timer::delay(1ms);
+        HAL_Delay(1);
 
-        // "Who am I" check.
+        // "Who am I" check.E
+        read_with_confirm(RegisterAddress::ACC_CHIP_ID, 0x1E);
+        timer::delay(1ms);
+        HAL_Delay(1);
         assert_always(read_with_confirm(RegisterAddress::ACC_CHIP_ID, 0x1E));
-
         // Enable INT1 as output pin, push-pull, active-low.
         assert_always(write_with_confirm(RegisterAddress::INT1_IO_CTRL, 0b00001000));
         // Map data ready interrupt to pin INT1.
@@ -165,6 +171,8 @@ private:
     bool read(RegisterAddress address, size_t read_size) {
         if (auto task = spi_.create_transmit_receive_task<mode>(this, read_size + 2)) {
             task->tx_buffer[0] = 0x80 | static_cast<uint8_t>(address);
+            task->tx_buffer[1] = 0x55;
+            task->tx_buffer[2] = 0x55;
             return true;
         }
         return false;
