@@ -14,13 +14,13 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* hal_uart_handle, uint16_t si
         field_id = usb::field::UplinkId::UART2_;
     } else if (hal_uart_handle == &huart7) {
         uart     = uart::uart2.get();
-        field_id = usb::field::UplinkId::UART3_;
+        field_id = usb::field::UplinkId::UART4_;
     } else if (hal_uart_handle == &huart10) {
         uart     = uart::uart3.get();
         field_id = usb::field::UplinkId::UART1_;
     } else if (hal_uart_handle == &huart5) {
         uart     = uart::uart_dbus.get();
-        field_id = usb::field::UplinkId::UART1_;
+        field_id = usb::field::UplinkId::UART3_;
     } else {
         return;
     }

@@ -128,8 +128,8 @@ int main(void)
   MX_UART9_Init();
   MX_SPI6_Init();
   MX_SPI2_Init();
-  /* USER CODE BEGIN 2 */
   MX_UART5_Init();
+  /* USER CODE BEGIN 2 */
   
   AppEntry();
   assert(0);
