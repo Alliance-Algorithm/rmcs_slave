@@ -64,7 +64,7 @@ inline int8_t
 }
 
 extern "C" {
-USBD_CDC_ItfTypeDef USBD_Interface_fops_FS = {
+USBD_CDC_ItfTypeDef USBD_Interface_fops_HS = {
     hal_cdc_init_callback, hal_cdc_deinit_callback, hal_cdc_control_callback,
     hal_cdc_receive_callback, hal_cdc_transmit_complete_callback};
 }
