@@ -7,6 +7,7 @@
 #include "app/spi/bmi088/gyro.hpp"
 #include "app/uart/uart.hpp"
 #include "app/usb/cdc.hpp"
+#include "gpio/bullet_checker.hpp"
 
 extern "C" {
 void AppEntry() { app.init().main(); }
@@ -15,6 +16,7 @@ void AppEntry() { app.init().main(); }
 App::App() {
     led::led.init();
     usb::cdc.init();
+    gpio::bullet_checker.init();
     can::can1.init();
     can::can2.init();
     uart::uart1.init();
