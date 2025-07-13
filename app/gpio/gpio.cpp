@@ -1,7 +1,7 @@
 #include <cstdint>
 
 #include <main.h>
-#include <stm32f4xx_hal_gpio.h>
+#include <stm32h7xx_hal_gpio.h>
 
 #include "app/spi/bmi088/accel.hpp"
 #include "app/spi/bmi088/gyro.hpp"

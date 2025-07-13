@@ -1,3 +1,11 @@
+# 提醒
+
+抽空对从机进行了通信速率测试，使用一收一发方式，测出速率仅**2.6~3.1Mbps**
+
+* 该测试办法或许不够严谨，但**达妙板高负载下所需通信带宽远大于该值**
+
+* 对于整车控制，在条件允许的情况下优先推荐多板方案
+
 # RMCS Slave
 
 [无下位机控制系统 RMCS（RoboMaster Control System）](https://github.com/Alliance-Algorithm/RMCS) 的下位机固件。

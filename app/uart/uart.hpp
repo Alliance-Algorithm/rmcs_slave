@@ -139,8 +139,9 @@ private:
     std::atomic<uint8_t> buffer_writing_ = 0;
 };
 
-inline constinit Uart::Lazy uart1{&huart6, 15};
-inline constinit Uart::Lazy uart2{&huart1, 15};
-inline constinit Uart::Lazy uart_dbus{&huart3, 31};
+inline constinit Uart::Lazy uart1{&huart1, 15};
+inline constinit Uart::Lazy uart2{&huart7, 15};
+inline constinit Uart::Lazy uart3{&huart10, 15};
+inline constinit Uart::Lazy uart_dbus{&huart5, 31};
 
 } // namespace uart

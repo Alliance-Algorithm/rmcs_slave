@@ -140,6 +140,6 @@ private:
     alignas(4) uint8_t rx_data_buffer_[max_buffer_size_];
 };
 
-inline constinit Spi::Lazy spi1(&hspi1);
+inline constinit Spi::Lazy spi1(&hspi2);
 
 } // namespace spi

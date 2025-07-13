@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
+#include "stm32h7xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -54,31 +54,30 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 void AppEntry(void);
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define SPI1_MISO_Pin GPIO_PIN_4
-#define SPI1_MISO_GPIO_Port GPIOB
-#define SPI1_SCK_Pin GPIO_PIN_3
-#define SPI1_SCK_GPIO_Port GPIOB
-#define LED_R_Pin GPIO_PIN_12
-#define LED_R_GPIO_Port GPIOH
-#define LED_G_Pin GPIO_PIN_11
-#define LED_G_GPIO_Port GPIOH
-#define LED_B_Pin GPIO_PIN_10
-#define LED_B_GPIO_Port GPIOH
-#define CS1_ACCEL_Pin GPIO_PIN_4
-#define CS1_ACCEL_GPIO_Port GPIOA
-#define INT1_ACC_Pin GPIO_PIN_4
-#define INT1_ACC_GPIO_Port GPIOC
-#define INT1_ACC_EXTI_IRQn EXTI4_IRQn
-#define INT1_GYRO_Pin GPIO_PIN_5
-#define INT1_GYRO_GPIO_Port GPIOC
-#define INT1_GYRO_EXTI_IRQn EXTI9_5_IRQn
-#define SPI1_MOSI_Pin GPIO_PIN_7
-#define SPI1_MOSI_GPIO_Port GPIOA
-#define CS1_GYRO_Pin GPIO_PIN_0
-#define CS1_GYRO_GPIO_Port GPIOB
+#define Power_5V_EN_Pin GPIO_PIN_15
+#define Power_5V_EN_GPIO_Port GPIOC
+#define CS1_ACCEL_Pin GPIO_PIN_0
+#define CS1_ACCEL_GPIO_Port GPIOC
+#define BMI088_MOSI_Pin GPIO_PIN_1
+#define BMI088_MOSI_GPIO_Port GPIOC
+#define BMI088_MISO_Pin GPIO_PIN_2
+#define BMI088_MISO_GPIO_Port GPIOC
+#define CS1_GYRO_Pin GPIO_PIN_3
+#define CS1_GYRO_GPIO_Port GPIOC
+#define INT1_ACC_Pin GPIO_PIN_10
+#define INT1_ACC_GPIO_Port GPIOE
+#define INT1_ACC_EXTI_IRQn EXTI15_10_IRQn
+#define INT1_GYRO_Pin GPIO_PIN_12
+#define INT1_GYRO_GPIO_Port GPIOE
+#define INT1_GYRO_EXTI_IRQn EXTI15_10_IRQn
+#define BMI088_SCK_Pin GPIO_PIN_13
+#define BMI088_SCK_GPIO_Port GPIOB
+#define KEY_Pin GPIO_PIN_15
+#define KEY_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

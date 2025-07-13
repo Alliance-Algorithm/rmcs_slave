@@ -6,11 +6,11 @@
 #include <chrono>
 #include <ratio>
 
-#include <stm32f407xx.h>
+#include <stm32h723xx.h>
 
 namespace timer {
 
-constexpr uint32_t system_frequency = 168'000'000;
+constexpr uint32_t system_frequency = 550'000'000;
 using SysFreqDuration = std::chrono::duration<uint32_t, std::ratio<1, system_frequency>>;
 
 inline void delay_basic(SysFreqDuration delay) {
