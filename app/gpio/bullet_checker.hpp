@@ -24,7 +24,7 @@ private:
         if (buffer) {
             auto& header                = *new (buffer) FieldHeader{};
             header.field_id             = static_cast<uint8_t>(usb::field::UplinkId::GPIO_);
-            header.bullet_checker_level = bullet_checker_level;
+            header.bullet_checker_level = !bullet_checker_level;
         }
     }
 
