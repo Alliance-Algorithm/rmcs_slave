@@ -20,17 +20,26 @@ private:
         const auto bullet_checker_level =
             static_cast<bool>(HAL_GPIO_ReadPin(BULLET_CHECKER_GPIO_Port, BULLET_CHECKER_Pin));
 
-        std::byte* buffer = buffer_wrapper.allocate(sizeof(FieldHeader));
+        std::byte* buffer = buffer_wrapper.allocate(sizeof(FieldHeader) + sizeof(FieldBody));
         if (buffer) {
             auto& header                = *new (buffer) FieldHeader{};
             header.field_id             = static_cast<uint8_t>(usb::field::UplinkId::GPIO_);
-            header.bullet_checker_level = !bullet_checker_level;
+            header.gpio_id              = 0b10;
+
+            auto& body     = *new (buffer + sizeof(FieldHeader)) FieldBody{};
+            body.gpio_data = bullet_checker_level ? 0b10 : 0b00;
         }
     }
 
     struct __attribute__((packed)) FieldHeader {
         uint8_t field_id : 4;
-        bool bullet_checker_level;
+        // 0b10 bullet checker
+        // 0b01 camera capturer
+        uint8_t gpio_id : 2;
+    };
+
+    struct __attribute__((packed)) FieldBody {
+        uint8_t gpio_data : 2;
     };
 };
 

@@ -7,7 +7,7 @@
 #include "app/spi/bmi088/gyro.hpp"
 #include "app/usb/cdc.hpp"
 #include "bullet_checker.hpp"
-#include "time_point_sync.hpp"
+#include "camera_capture.hpp"
 
 extern "C" {
 
@@ -16,8 +16,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t gpio_pin) {
         spi::bmi088::accelerometer->data_ready_callback();
     } else if (gpio_pin == INT1_GYRO_Pin) {
         spi::bmi088::gyroscope->data_ready_callback();
-    } else if (gpio_pin == TIMEPOINT_SYNC_Pin) {
-        gpio::time_point_syncer->read_device_write_buffer(usb::cdc->get_transmit_buffer());
+    } else if (gpio_pin == CAMERA_CAPUTRER_Pin) {
+        gpio::camera_capturer::camera_capturer_callback(usb::cdc->get_transmit_buffer());
     }
 }
 

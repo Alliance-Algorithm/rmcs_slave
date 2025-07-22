@@ -23,8 +23,7 @@ enum class UplinkId : uint8_t {
     UART3_ = 7,
     UART4_ = 8,
     UART5_ = 9,
-
-    TIME_POINT = 10,
+    UART6_ = 10,
 
     IMU_ = 11,
 };

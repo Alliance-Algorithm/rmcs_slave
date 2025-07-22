@@ -51,6 +51,7 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOE_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(CS1_ACCEL_GPIO_Port, CS1_ACCEL_Pin, GPIO_PIN_SET);
@@ -71,17 +72,17 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : CAMERA_CAPUTRER_Pin */
+  GPIO_InitStruct.Pin = CAMERA_CAPUTRER_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(CAMERA_CAPUTRER_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : BULLET_CHECKER_Pin */
   GPIO_InitStruct.Pin = BULLET_CHECKER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(BULLET_CHECKER_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : TIMEPOINT_SYNC_Pin */
-  GPIO_InitStruct.Pin = TIMEPOINT_SYNC_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(TIMEPOINT_SYNC_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : CS1_GYRO_Pin */
   GPIO_InitStruct.Pin = CS1_GYRO_Pin;
@@ -96,9 +97,6 @@ void MX_GPIO_Init(void)
 
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 4, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 }
 
