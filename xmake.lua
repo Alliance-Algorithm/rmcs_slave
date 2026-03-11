@@ -11,6 +11,7 @@ set_toolchains("gnu-rm")              -- 使用gnu-arm工具链
 
 target("application", function(t)
     local version = "2.1.2"
+    local tinyusb_root = "bsp/tinyusb"
     set_version(version)
     add_defines("APP_VERSION=\"" .. version .. "\"")
 
@@ -31,7 +32,22 @@ target("application", function(t)
     -- 添加源文件和头文件
     add_files("bsp/SEGGER/**.c", "bsp/SEGGER/**.S")
     add_files("app/**.cpp", "utility/**.cpp")
-    add_includedirs(".")
+    add_files(
+        "app/usb/vendor.cpp",
+        "app/usb/usb_descriptors.cpp"
+    )
+    add_files(
+        tinyusb_root .. "/src/tusb.c",
+        tinyusb_root .. "/src/common/tusb_fifo.c",
+        tinyusb_root .. "/src/device/usbd.c",
+        tinyusb_root .. "/src/device/usbd_control.c",
+        tinyusb_root .. "/src/portable/synopsys/dwc2/dwc2_common.c",
+        tinyusb_root .. "/src/portable/synopsys/dwc2/dcd_dwc2.c",
+        tinyusb_root .. "/src/class/vendor/vendor_device.c",
+        tinyusb_root .. "/src/class/dfu/dfu_rt_device.c"
+    )
+    add_includedirs(".", "app/include")
+    add_sysincludedirs(tinyusb_root .. "/src")
 
     -- 在任何模式下都生成调试信息
     add_cxflags("-g", "-gdwarf-2")
@@ -42,16 +58,17 @@ target("application", function(t)
     add_ldflags("-mcpu=cortex-m4", "-mthumb", "-mfpu=fpv4-sp-d16", "-mfloat-abi=hard")
 
     -- 启用all和extra级别的警告，启用变量遮蔽(shadow)的警告，并将所有警告视为错误
-    add_cxflags("-Wall", "-Wextra", "-Wshadow", "-Werror")
+    add_cxxflags("-Wall", "-Wextra", "-Wshadow", "-Werror")
     -- (白名单)未使用的变量视为警告，未使用的函数参数不警告
-    add_cxflags("-Wno-error=unused", "-Wno-error=unused-variable")
-    add_cxflags("-Wno-error=unused-but-set-variable", "-Wno-error=unused-function", "-Wno-unused-parameter")
+    add_cxxflags("-Wno-error=unused", "-Wno-error=unused-variable")
+    add_cxxflags("-Wno-error=unused-but-set-variable", "-Wno-error=unused-function", "-Wno-unused-parameter")
     add_cxxflags("-Wno-error=unused-local-typedefs")
     -- 对于gcc编译器，需要加一句-pedantic-errors禁用所有GNU扩展
-    add_cxflags("-pedantic-errors")
+    add_cxxflags("-pedantic-errors")
 
     -- 定义HAL库相关的宏
     add_defines("USE_HAL_DRIVER", "STM32F407xx")
+    add_defines("CFG_TUSB_MCU=OPT_MCU_STM32F4")
 
     -- 将全局变量和函数放置在目标文件中的单独部分中，允许链接器在链接过程中删除未使用的变量和函数，减少最终文件的大小
     add_cxflags("-fdata-sections", "-ffunction-sections")
@@ -62,7 +79,7 @@ target("application", function(t)
     add_cxxflags("-fno-threadsafe-statics")
 
     -- 指定链接脚本
-    add_ldflags("-T bsp/HAL/STM32F407IGHx_FLASH.ld")
+    add_ldflags("-T bsp/HAL/STM32F407XX_FLASH.ld")
     -- 链接标准c库，数学库和标准c++库
     add_ldflags("-lc", "-lm", "-lstdc++")
     -- 在链接时打印内存占用
@@ -70,4 +87,40 @@ target("application", function(t)
 
     -- 启用垃圾收集：在链接过程中删除未使用的变量和函数
     add_ldflags("-Wl,--gc-sections")
+
+    after_build(function(target, opt)
+        import("lib.detect.find_program")
+        import("utils.progress")
+
+        local function run_checked(stage, program, argv)
+            local ok, _, err, errors = os.iorunv(program, argv)
+            if not ok then
+                raise("%s failed: %s%s", stage, errors or "unknown error", err and #err > 0 and ("\n" .. err) or "")
+            end
+        end
+
+        local sdkdir = get_config("sdk")
+        local objcopy_paths = sdkdir and {path.join(sdkdir, "bin")} or nil
+        local objcopy = find_program("arm-none-eabi-objcopy", {paths = objcopy_paths})
+            or find_program("arm-none-eabi-objcopy")
+        local python3 = find_program("python3")
+        local dfu_suffix = find_program("dfu-suffix")
+
+        assert(objcopy, "arm-none-eabi-objcopy not found!")
+        assert(python3, "python3 not found!")
+        assert(dfu_suffix, "dfu-suffix not found!")
+
+        local targetdir = path.absolute(target:targetdir(), os.projectdir())
+        local basename = target:basename()
+        local targetfile = path.absolute(target:targetfile(), os.projectdir())
+        local binfile = path.join(targetdir, basename .. ".bin")
+        local dfufile = path.join(targetdir, basename .. ".dfu")
+        local append_image_hash = path.join(os.projectdir(), ".scripts", "append_image_hash")
+
+        progress.show(opt.progress, "${color.build.target}generating %s", path.filename(dfufile))
+
+        run_checked("objcopy", objcopy, {"-O", "binary", targetfile, binfile})
+        run_checked("append_image_hash", python3, {append_image_hash, "-o", dfufile, binfile})
+        run_checked("dfu-suffix", dfu_suffix, {"-a", dfufile, "-v", "0xA11C", "-p", "0xD401", "-d", "0x0300"})
+    end)
 end)

@@ -1,0 +1,3 @@
+[submodule "bsp/tinyusb"]
+	path = bsp/tinyusb
+	url = https://github.com/hathach/tinyusb

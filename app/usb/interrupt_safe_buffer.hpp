@@ -14,7 +14,7 @@ namespace usb {
 
 class InterruptSafeBuffer final : utility::Immovable {
 public:
-    friend class Cdc;
+    friend class Vendor;
 
     static constexpr size_t batch_size  = 64;
     static constexpr size_t batch_count = 8;

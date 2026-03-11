@@ -4,12 +4,11 @@
 #include <cstdio>
 
 #include <spi.h>
-#include <usbd_cdc.h>
 
 #include "app/spi/bmi088/field.hpp"
 #include "app/spi/spi.hpp"
 #include "app/timer/delay.hpp"
-#include "app/usb/cdc.hpp"
+#include "app/usb/vendor.hpp"
 #include "app/usb/interrupt_safe_buffer.hpp"
 #include "utility/assert.hpp"
 namespace spi::bmi088 {
@@ -119,7 +118,7 @@ protected:
         if (initialized_) {
             assert(size == sizeof(Data) + 1);
             auto& data = *std::launder(reinterpret_cast<Data*>(rx_buffer + 1));
-            read_device_write_buffer(usb::cdc->get_transmit_buffer(), data);
+            read_device_write_buffer(usb::vendor->get_transmit_buffer(), data);
         } else {
             init_rx_buffer_ = rx_buffer;
             init_rx_size_   = size;

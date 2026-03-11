@@ -1,6 +1,6 @@
 #include "uart.hpp"
 
-#include "app/usb/cdc.hpp"
+#include "app/usb/vendor.hpp"
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* hal_uart_handle, uint16_t size) {
     if (__HAL_UART_GET_FLAG(hal_uart_handle, UART_FLAG_IDLE))
@@ -22,5 +22,5 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef* hal_uart_handle, uint16_t si
         return;
     }
 
-    uart->read_device_write_buffer(usb::cdc->get_transmit_buffer(), field_id, size);
+    uart->read_device_write_buffer(usb::vendor->get_transmit_buffer(), field_id, size);
 }

@@ -1,12 +1,14 @@
 #include "app/app.hpp"
 
+#include <device/usbd.h>
 #include <main.h>
 
 #include "app/can/can.hpp"
 #include "app/spi/bmi088/accel.hpp"
 #include "app/spi/bmi088/gyro.hpp"
 #include "app/uart/uart.hpp"
-#include "app/usb/cdc.hpp"
+#include "app/usb/vendor.hpp"
+#include "utility/boot_mailbox.hpp"
 
 extern "C" {
 void AppEntry() { app.init().main(); }
@@ -14,7 +16,8 @@ void AppEntry() { app.init().main(); }
 
 App::App() {
     led::led.init();
-    usb::cdc.init();
+    utility::boot_mailbox.clear();
+    usb::vendor.init();
     can::can1.init();
     can::can2.init();
     uart::uart1.init();
@@ -27,15 +30,17 @@ App::App() {
 
 [[noreturn]] void App::main() {
     while (true) {
-        usb::cdc->try_transmit();
+        tud_task();
+
+        usb::vendor->try_transmit();
         can::can1->try_transmit();
-        usb::cdc->try_transmit();
+        usb::vendor->try_transmit();
         can::can2->try_transmit();
-        usb::cdc->try_transmit();
+        usb::vendor->try_transmit();
         uart::uart1->try_transmit();
-        usb::cdc->try_transmit();
+        usb::vendor->try_transmit();
         uart::uart2->try_transmit();
-        usb::cdc->try_transmit();
+        usb::vendor->try_transmit();
         uart::uart_dbus->try_transmit();
     }
 }
